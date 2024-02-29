@@ -1,5 +1,6 @@
 from models.user import User as UserModel
 from schemas.user import User
+from utils.pass_hash import generate_password
 
 class UserService():
     def __init__(self, db) -> None:
@@ -15,6 +16,7 @@ class UserService():
 
     def create_user(self, user:User):
         new_user = UserModel(**user.model_dump())
+        new_user.password = generate_password(new_user.password)
         self.db.add(new_user)
         self.db.commit()
 
@@ -22,7 +24,7 @@ class UserService():
         user = self.get_user(id)
         user.user_name = data.user_name
         user.user_mail = data.user_mail
-        user.password = data.password
+        user.password = generate_password(data.password)
         self.db.commit()
 
     def delete_user(self, id:int):

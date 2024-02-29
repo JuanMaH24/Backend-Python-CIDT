@@ -39,7 +39,7 @@ def create_user(user: User) -> dict:
 def update_user(id: int, user: User) -> dict:
     if not UserService(Session()).get_user(id):
         return JSONResponse(content={"message": "User not found"}, status_code=404)
-    UserService(UserService(Session()).get_user(id)).update_user(id, User)
+    UserService(Session()).update_user(id, user)
     return JSONResponse(content={"message": "User updated successfully"}, status_code=200)
 
 

@@ -6,6 +6,7 @@ from models.user import User as UserModel
 from config.database import Session
 from services.user import UserService
 from schemas.user import User
+from utils.pass_hash import check_password
 
 auth_router = APIRouter()
 
@@ -14,7 +15,7 @@ auth_router = APIRouter()
 def login(user: User) -> dict:
     result = UserService(Session()).get_users()
     for existing_user in jsonable_encoder(result):
-        if user.user_mail == existing_user["user_mail"] and user.password == existing_user["password"]:
+        if user.user_mail == existing_user["user_mail"] and check_password(existing_user["password"], user.password):
             token = create_token(data=user.model_dump())
             return JSONResponse(content={"token": token}, 
                                 status_code=200)

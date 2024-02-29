@@ -14,11 +14,11 @@ class ProductService():
         return result
 
     def get_product_by_category(self, category):
-        result = self.db.query(ProductModel).filter(ProductModel.category == category).all()
+        result = self.db.query(ProductModel).filter(ProductModel.category.like(category)).all()
         return result
     
     def get_product_by_name(self, product_name):
-        result = self.db.query(ProductModel).filter(ProductModel.product_name.like(f'%{product_name}%'))
+        result = self.db.query(ProductModel).filter(ProductModel.product_name.contains(product_name)).all()
         return result
     
 

@@ -9,8 +9,8 @@ from routers.user import user_router
 
 # Estamos creando una instancia de la clase FastAPI
 app = FastAPI()
-app.title = "API para bares" 
-app.version = "3.0.0"
+app.title = "BAR API" 
+app.version = "0.0.1"
 
 app.add_middleware(ErrorHandler)
 app.include_router(product_router)

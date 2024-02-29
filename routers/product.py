@@ -27,14 +27,14 @@ def get_product(id: int = Path(ge=1)) -> Product:
             })
     return JSONResponse(status_code=200, content=jsonable_encoder(result))
 
-@product_router.get("/product/category", tags=['products'], response_model=List[Product])
+@product_router.get("/product/category/", tags=['products'], response_model=List[Product])
 def get_product_by_category(category: str = Query(min_length=1, max_length=15)) -> List[Product]:
     result = ProductService(Session()).get_product_by_category(category)
     if not result:
         return JSONResponse(status_code=404, content={"message": "Products not found"})
     return JSONResponse(status_code=200, content=jsonable_encoder(result))
 
-@product_router.get("/product/name", tags=['products'], response_model=List[Product])
+@product_router.get("/product/name/", tags=['products'], response_model=List[Product])
 def get_product_by_name(product_name: str = Query(min_length=1, max_length=30)) -> List[Product]:
     result = ProductService(Session()).get_product_by_name(product_name)
     if not result:
@@ -48,15 +48,15 @@ def create_product(product: Product) -> dict:
 
 
 @product_router.put("/products/{id}", tags=['products'], response_model=dict, status_code=200, dependencies=[Depends(JWTBearer())])
-def update_movie(id: int, product: Product) -> dict:
+def update_product(id: int, product: Product) -> dict:
     if not ProductService(Session()).get_product(id):
         return JSONResponse(content={"message": "Product not found"}, status_code=404)
-    ProductService(ProductService(Session()).get_product(id)).update_product(id, product)
+    ProductService(Session()).update_product(id, product)
     return JSONResponse(content={"message": "Movie updated successfully"}, status_code=200)
 
 
 @product_router.delete("/products/{id}", tags=['products'], response_model=dict, dependencies=[Depends(JWTBearer())])
-def delete_movie(id: int) -> dict:
+def delete_product(id: int) -> dict:
     if not ProductService(Session()).get_product(id):
         return JSONResponse(content={"message": "Product not found"}, status_code=404)
     ProductService(Session()).delete_product(id)
